@@ -12,19 +12,22 @@ public class PlayerController : MonoBehaviour
     
     private InputAction moveAction;
 
+    private SpriteRenderer sr;
+    
     public Vector2 moveInput; // vector2 is the variable for x,y 
    
     public Rigidbody2D rb; // to let the object move and change things
 
     public bool isFacingRight = true;
 
-    public Animator animator;
+    private Animator animator;
+    
     
 
-    public void Flip() // to activate flip
+    public void Flip() // to activate flip - character looks to left or right, depending with direction it walks
     {
         isFacingRight = !isFacingRight;
-        Vector3 localScale = transform.localScale;
+        Vector3 localScale = transform.localScale; 
         
         localScale.x *= -1;
         
@@ -40,7 +43,7 @@ public class PlayerController : MonoBehaviour
         moveAction = inputActions.Player.Move; // to know that the player has to  move
 
         animator = GetComponent<Animator>();
-
+        
     }
     
     private void OnEnable()
@@ -49,19 +52,20 @@ public class PlayerController : MonoBehaviour
 
         moveAction.performed += Move; //subscribed
         moveAction.canceled += Move;
+        
     }
-
+    
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(moveInput.x * movementSpeed, rb.velocity.y);
 
-        if (moveInput.x > 0 && !isFacingRight)
+        if (moveInput.x > 0 )
         {
-            Flip(); // flip so the player looks to the left or right
+            transform.rotation = Quaternion.Euler(0,0,0);
         }
-        else if (moveInput.x < 0 && isFacingRight) 
+        else if (moveInput.x < 0)
         {
-            Flip();
+            transform.rotation = Quaternion.Euler(0,180,0);
         }
     }
     private void OnDisable()
@@ -70,8 +74,9 @@ public class PlayerController : MonoBehaviour
 
         moveAction.performed -= Move; //unsubscribed
         moveAction.canceled -= Move;
+        
     }
-
+    
     private void Move(InputAction.CallbackContext ctx) // can be ctx or whatever you want
     {
         moveInput = ctx.ReadValue<Vector2>(); 
@@ -79,6 +84,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        animator.SetFloat("X_Movement", Mathf.Abs(rb.velocity.x)); // abs so the animation goes in every directrion
+        animator.SetFloat("MovementValue" , Mathf.Abs(rb.velocity.x)); // abs so the animation goes in every directrion- it makes the number go from negative to positive
+         
     }
+
 }
