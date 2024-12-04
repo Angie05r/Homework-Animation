@@ -8,16 +8,26 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public GameInput inputActions;
-    public float movementSpeed = 4;
+    
+    
+    [Header("Movement")]
+    [SerializeField]private float movementSpeed = 4f;
+    [SerializeField]private float jumpPower = 4f;
+
+    [Header("GroundCheck")] 
+    [SerializeField] private Vector2 boxSize;
+    
     
     private InputAction moveAction;
+    private InputAction JumpAction;
 
-    private SpriteRenderer sr;
+    private bool isJumping;
+    private bool canJump;
     
-    public Vector2 moveInput; // vector2 is the variable for x,y 
+    private SpriteRenderer sr;
    
+    public Vector2 moveInput; // vector2 is the variable for x,y 
     public Rigidbody2D rb; // to let the object move and change things
-
     public bool isFacingRight = true;
 
     private Animator animator;
@@ -82,10 +92,17 @@ public class PlayerController : MonoBehaviour
         moveInput = ctx.ReadValue<Vector2>(); 
     }
 
+    private void Jump(InputAction.CallbackContext ctx)
+    {
+        if (isGrounded && canJump) ;
+        {
+            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        }
+    }
+    
     private void Update()
     {
         animator.SetFloat("MovementValue" , Mathf.Abs(rb.velocity.x)); // abs so the animation goes in every directrion- it makes the number go from negative to positive
-         
     }
-
+    
 }
