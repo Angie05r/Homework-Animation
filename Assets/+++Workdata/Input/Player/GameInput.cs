@@ -64,6 +64,15 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f62811a-ed95-4d6f-8852-ccbe8c0cf489"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -306,6 +315,17 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c298f51-30b4-412b-a4d3-0600ba7acc41"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -897,6 +917,7 @@ namespace UnityEngine.InputSystem
             m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
             m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+            m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -980,6 +1001,7 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_Look;
         private readonly InputAction m_Player_Run;
         private readonly InputAction m_Player_Jump;
+        private readonly InputAction m_Player_Dash;
         public struct PlayerActions
         {
             private @GameInput m_Wrapper;
@@ -988,6 +1010,7 @@ namespace UnityEngine.InputSystem
             public InputAction @Look => m_Wrapper.m_Player_Look;
             public InputAction @Run => m_Wrapper.m_Player_Run;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
+            public InputAction @Dash => m_Wrapper.m_Player_Dash;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1009,6 +1032,9 @@ namespace UnityEngine.InputSystem
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Dash.started += instance.OnDash;
+                @Dash.performed += instance.OnDash;
+                @Dash.canceled += instance.OnDash;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1025,6 +1051,9 @@ namespace UnityEngine.InputSystem
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
+                @Dash.started -= instance.OnDash;
+                @Dash.performed -= instance.OnDash;
+                @Dash.canceled -= instance.OnDash;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1211,6 +1240,7 @@ namespace UnityEngine.InputSystem
             void OnLook(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnDash(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
