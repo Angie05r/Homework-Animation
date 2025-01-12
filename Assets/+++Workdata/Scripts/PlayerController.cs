@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
    }
    
-   
+   #region workingDash
    public void Dash(InputAction.CallbackContext ctx)
    {
        if (ctx.performed && !isDashing)
@@ -155,6 +155,7 @@ public class PlayerController : MonoBehaviour
        Debug.Log("DashEnded");
    }
    
+   #endregion
   
    void CheckGround()
    {
