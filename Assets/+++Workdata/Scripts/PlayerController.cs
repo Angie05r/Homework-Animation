@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
   
    [Header("Movement")]
    [SerializeField]private float movementSpeed = 4f;
+   [SerializeField] private float rollSpeed = 7f;
    [SerializeField]private float jumpPower = 4f;
 
    private InputAction dashAction;
@@ -28,12 +29,14 @@ public class PlayerController : MonoBehaviour
    [SerializeField] private LayerMask groundLayer;
   
    private InputAction moveAction;
+   private InputAction rollAction;
    private InputAction JumpAction;
    private InputAction interactAction;
 
 
    private bool isJumping;
    private bool canJump;
+   private bool isRolling;
   
    private SpriteRenderer sr;
  
@@ -85,7 +88,7 @@ public class PlayerController : MonoBehaviour
 
        moveAction.performed += Move; //subscribed
        moveAction.canceled += Move;
-      
+       
        JumpAction.performed += Jump;
        
        dashAction.performed += Dash;
@@ -96,7 +99,7 @@ public class PlayerController : MonoBehaviour
        CheckGround();
        if (!isDashing)
        {
-           rb.velocity = new Vector2(moveInput.x * movementSpeed, rb.velocity.y);
+           rb.linearVelocity = new Vector2(moveInput.x * movementSpeed, rb.linearVelocity.y);
        }
 
        if (moveInput.x > 0 )
@@ -117,6 +120,7 @@ public class PlayerController : MonoBehaviour
 
        moveAction.performed -= Move; //unsubscribed
        moveAction.canceled -= Move;
+       
        
        JumpAction.performed -= Jump;
        
@@ -145,18 +149,23 @@ public class PlayerController : MonoBehaviour
        while (Time.time < startTime + dashDuration)
        {
            Debug.Log("Dashing");
-           rb.velocity = new Vector2(dashDirection.x * dashSpeed, rb.velocity.y);
+           rb.linearVelocity = new Vector2(dashDirection.x * dashSpeed, rb.linearVelocity.y);
            yield return null;
        }
 
        // Dash beendet, Bewegung zurücksetzen
-       rb.velocity = new Vector2(0, rb.velocity.y);
+       rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
        isDashing = false;
        Debug.Log("DashEnded");
    }
    
    #endregion
-  
+
+   private void roll(InputAction.CallbackContext ctx)
+   {
+       
+   }
+   
    void CheckGround()
    {
        isGrounded = Physics2D.OverlapBox( boxxOffset , transform.position, 0f,  groundLayer);
@@ -167,6 +176,7 @@ public class PlayerController : MonoBehaviour
        moveInput = ctx.ReadValue<Vector2>();
    }
 
+   
 
    void UpdateAnimator()
    {
@@ -185,10 +195,11 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
       
    }
+   
   
    private void Update()
    {
-       animator.SetFloat("MovementValue" , Mathf.Abs(rb.velocity.x)); // abs so the animation goes in every directrion- it makes the number go from negative to positive
+       animator.SetFloat("MovementValue" , Mathf.Abs(rb.linearVelocity.x)); // abs so the animation goes in every directrion- it makes the number go from negative to positive
        animator.SetBool("isDashing", isDashing);
    }
   
