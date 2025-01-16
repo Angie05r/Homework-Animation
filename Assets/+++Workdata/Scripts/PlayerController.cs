@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
   
    [Header("Movement")]
    [SerializeField]private float movementSpeed = 4f;
-   [SerializeField] private float rollSpeed = 7f;
+   //[SerializeField] private float runSpeed = 7f;
    [SerializeField]private float jumpPower = 4f;
 
    private InputAction dashAction;
@@ -29,14 +29,14 @@ public class PlayerController : MonoBehaviour
    [SerializeField] private LayerMask groundLayer;
   
    private InputAction moveAction;
-   private InputAction rollAction;
+   private InputAction runAction;
    private InputAction JumpAction;
    private InputAction interactAction;
 
-
+   
    private bool isJumping;
    private bool canJump;
-   private bool isRolling;
+   //private bool isRunning;
   
    private SpriteRenderer sr;
  
@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
 
        moveAction.performed += Move; //subscribed
        moveAction.canceled += Move;
+       
        
        JumpAction.performed += Jump;
        
@@ -161,10 +162,7 @@ public class PlayerController : MonoBehaviour
    
    #endregion
 
-   private void roll(InputAction.CallbackContext ctx)
-   {
-       
-   }
+   
    
    void CheckGround()
    {

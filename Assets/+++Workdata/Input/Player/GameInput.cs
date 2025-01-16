@@ -66,7 +66,7 @@ namespace UnityEngine.InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Roll"",
+                    ""name"": ""Run"",
                     ""type"": ""Button"",
                     ""id"": ""2d0261be-0d15-432a-8b7b-1804a18fb68e"",
                     ""expectedControlType"": """",
@@ -277,11 +277,11 @@ namespace UnityEngine.InputSystem
                 {
                     ""name"": """",
                     ""id"": ""8227db2c-881c-434b-9ca3-c83b50d27259"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Roll"",
+                    ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -873,7 +873,7 @@ namespace UnityEngine.InputSystem
             m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
-            m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
+            m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -957,7 +957,7 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_Look;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Dash;
-        private readonly InputAction m_Player_Roll;
+        private readonly InputAction m_Player_Run;
         public struct PlayerActions
         {
             private @GameInput m_Wrapper;
@@ -966,7 +966,7 @@ namespace UnityEngine.InputSystem
             public InputAction @Look => m_Wrapper.m_Player_Look;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Dash => m_Wrapper.m_Player_Dash;
-            public InputAction @Roll => m_Wrapper.m_Player_Roll;
+            public InputAction @Run => m_Wrapper.m_Player_Run;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -988,9 +988,9 @@ namespace UnityEngine.InputSystem
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
-                @Roll.started += instance.OnRoll;
-                @Roll.performed += instance.OnRoll;
-                @Roll.canceled += instance.OnRoll;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1007,9 +1007,9 @@ namespace UnityEngine.InputSystem
                 @Dash.started -= instance.OnDash;
                 @Dash.performed -= instance.OnDash;
                 @Dash.canceled -= instance.OnDash;
-                @Roll.started -= instance.OnRoll;
-                @Roll.performed -= instance.OnRoll;
-                @Roll.canceled -= instance.OnRoll;
+                @Run.started -= instance.OnRun;
+                @Run.performed -= instance.OnRun;
+                @Run.canceled -= instance.OnRun;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1196,7 +1196,7 @@ namespace UnityEngine.InputSystem
             void OnLook(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
-            void OnRoll(InputAction.CallbackContext context);
+            void OnRun(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

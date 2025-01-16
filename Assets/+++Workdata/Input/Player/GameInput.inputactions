@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Roll",
+                    "name": "Run",
                     "type": "Button",
                     "id": "2d0261be-0d15-432a-8b7b-1804a18fb68e",
                     "expectedControlType": "",
@@ -253,11 +253,11 @@
                 {
                     "name": "",
                     "id": "8227db2c-881c-434b-9ca3-c83b50d27259",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Roll",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
