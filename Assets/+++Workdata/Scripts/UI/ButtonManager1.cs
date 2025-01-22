@@ -8,6 +8,7 @@
     {
         [SerializeField] private GameObject mainMenu;
         [SerializeField] private GameObject optionsMenu;
+        [SerializeField] private GameObject pauseMenu;
 
         [SerializeField] private Animator fadePanelAnim;
 
@@ -28,7 +29,6 @@
             StartCoroutine(FadeInLoadScene());
         }
         
-            
         IEnumerator FadeInLoadScene()
         {
             AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
