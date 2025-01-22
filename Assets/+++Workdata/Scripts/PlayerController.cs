@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
    private bool isGrounded;
    [SerializeField]private Vector2 boxxOffset;
 
+   private Interactable selectedInteractble;
+
 
    private Animator animator;
   
@@ -83,8 +85,6 @@ public class PlayerController : MonoBehaviour
   
    private void OnEnable()
    {
-       inputActions.Enable();
-
 
        moveAction.performed += Move; //subscribed
        moveAction.canceled += Move;
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
        dashAction.performed += Dash;
    }
   
-   private void FixedUpdate()
+   private void FixedUpdate() 
    {
        CheckGround();
        if (!isDashing)
@@ -116,8 +116,6 @@ public class PlayerController : MonoBehaviour
    }
    private void OnDisable()
    {
-       inputActions.Disable(); //disabled unsere InputMap, MUSS HIER SEIN)
-
 
        moveAction.performed -= Move; //unsubscribed
        moveAction.canceled -= Move;
@@ -128,6 +126,19 @@ public class PlayerController : MonoBehaviour
        dashAction.performed -= Dash;
 
    }
+
+   public void EnableInput()
+   {
+       // man kann es auch mit in OnEnable packen
+       inputActions.Enable();
+   }
+
+   public void DisableInput()
+   {
+       // man kann es auch mit in OnDisable packen
+       inputActions.Disable(); //disabled unsere InputMap, MUSS HIER SEIN)
+   }
+   
    
    #region workingDash
    public void Dash(InputAction.CallbackContext ctx)
@@ -187,7 +198,7 @@ public class PlayerController : MonoBehaviour
       Gizmos.DrawWireCube(boxxOffset , boxSize );
    }
 
-   private void Jump(InputAction.CallbackContext ctx)
+   private void Jump(InputAction.CallbackContext ctx) // damit man springen kann
    {
        if(!isGrounded)
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
@@ -200,8 +211,62 @@ public class PlayerController : MonoBehaviour
        animator.SetFloat("MovementValue" , Mathf.Abs(rb.linearVelocity.x)); // abs so the animation goes in every directrion- it makes the number go from negative to positive
        animator.SetBool("isDashing", isDashing);
    }
+
+   private void OnTriggerEnter2D(Collider2D other)
+   {
+       TrySelectInteractable(other);
+   }
+
+   private void OnTriggerExit2D(Collider2D other)
+   {
+       TryDeselectInteractable(other);
+   }
+   
+   #region Interaction
+
+   private void Interact(InputAction.CallbackContext ctx)
+   {
+       if (selectedInteractble != null)
+       {
+           selectedInteractble.Interact();
+       }
+   }
+
   
+   private void TrySelectInteractable(Collider2D other)
+   {
+       Interactable interactable = other.GetComponent<Interactable>();
+
+       if (interactable == null) ;
+
+       if (selectedInteractble != null)
+       {
+           selectedInteractble.Deselect();
+       }
+
+       selectedInteractble = interactable;
+       selectedInteractble.Select();
+   }
+
+ 
+   private void TryDeselectInteractable(Collider2D other)
+   {
+       Interactable interactable = other.GetComponent<Interactable>();
+
+       if (interactable == null) return;
+
+       if (interactable == selectedInteractble)
+       {
+           selectedInteractble.Deselect();
+           selectedInteractble = null;
+       }
+   }
+   
+   
+   #endregion
+   
 }
+
 
 
 
