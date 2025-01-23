@@ -3,9 +3,10 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     //public GameInput inputActions;
-    public GameObject pauseMenu;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject mainMenu;
+    
     private bool isPaused = false;
-  
 
 
     public void PauseGame()  // PauseMenu anmachen
@@ -37,4 +38,19 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
     }
+    
+    #region MainMenu try
+    public void Button_OpenpauseMenu()
+    {
+        mainMenu.SetActive(false);
+       pauseMenu.SetActive(true);
+    }
+    
+    public void Button_OpenMainMenu()
+    { 
+        mainMenu.SetActive(true);
+       pauseMenu.SetActive(false);
+    }
+    
+    #endregion
 }

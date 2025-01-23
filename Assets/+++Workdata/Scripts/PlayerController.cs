@@ -79,6 +79,8 @@ public class PlayerController : MonoBehaviour
        JumpAction = inputActions.Player.Jump;
        dashAction = inputActions.Player.Dash;
 
+       interactAction = inputActions.Player.Interact;
+
        animator = GetComponent<Animator>();
       
    }
@@ -89,10 +91,11 @@ public class PlayerController : MonoBehaviour
        moveAction.performed += Move; //subscribed
        moveAction.canceled += Move;
        
-       
        JumpAction.performed += Jump;
        
        dashAction.performed += Dash;
+
+       interactAction.performed += Interact;
    }
   
    private void FixedUpdate() 
@@ -122,9 +125,11 @@ public class PlayerController : MonoBehaviour
        
        
        JumpAction.performed -= Jump;
-       
+       //runAction.performed
+       //runAction,canceled    
        dashAction.performed -= Dash;
-
+       
+       interactAction.performed -= Interact;
    }
 
    public void EnableInput()

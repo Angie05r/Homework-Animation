@@ -82,6 +82,15 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""80bac439-9bb9-40fb-9841-81262b30174c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -304,6 +313,28 @@ namespace UnityEngine.InputSystem
                     ""action"": ""PauseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b28c542-1e95-4ce3-ae08-0366b0a5bcf4"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""058c1d0b-fb29-4fbd-b204-ff9107cc461c"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -324,7 +355,7 @@ namespace UnityEngine.InputSystem
                     ""name"": ""Submit"",
                     ""type"": ""Button"",
                     ""id"": ""7607c7b6-cd76-4816-beef-bd0341cfe950"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -333,7 +364,7 @@ namespace UnityEngine.InputSystem
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""15cef263-9014-4fd5-94d9-4e4a6234a6ef"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -680,6 +711,28 @@ namespace UnityEngine.InputSystem
                 },
                 {
                     ""name"": """",
+                    ""id"": ""43237379-4bbe-4de4-9c70-c90e46569fd3"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92a5a48c-a8fe-4fd2-93dd-25a14b3f8be4"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""82627dcc-3b13-4ba9-841d-e4b746d6553e"",
                     ""path"": ""*/{Cancel}"",
                     ""interactions"": """",
@@ -895,6 +948,7 @@ namespace UnityEngine.InputSystem
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
             m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
             m_Player_PauseMenu = m_Player.FindAction("PauseMenu", throwIfNotFound: true);
+            m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -980,6 +1034,7 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_Dash;
         private readonly InputAction m_Player_Run;
         private readonly InputAction m_Player_PauseMenu;
+        private readonly InputAction m_Player_Interact;
         public struct PlayerActions
         {
             private @GameInput m_Wrapper;
@@ -990,6 +1045,7 @@ namespace UnityEngine.InputSystem
             public InputAction @Dash => m_Wrapper.m_Player_Dash;
             public InputAction @Run => m_Wrapper.m_Player_Run;
             public InputAction @PauseMenu => m_Wrapper.m_Player_PauseMenu;
+            public InputAction @Interact => m_Wrapper.m_Player_Interact;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1017,6 +1073,9 @@ namespace UnityEngine.InputSystem
                 @PauseMenu.started += instance.OnPauseMenu;
                 @PauseMenu.performed += instance.OnPauseMenu;
                 @PauseMenu.canceled += instance.OnPauseMenu;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1039,6 +1098,9 @@ namespace UnityEngine.InputSystem
                 @PauseMenu.started -= instance.OnPauseMenu;
                 @PauseMenu.performed -= instance.OnPauseMenu;
                 @PauseMenu.canceled -= instance.OnPauseMenu;
+                @Interact.started -= instance.OnInteract;
+                @Interact.performed -= instance.OnInteract;
+                @Interact.canceled -= instance.OnInteract;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1227,6 +1289,7 @@ namespace UnityEngine.InputSystem
             void OnDash(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnPauseMenu(InputAction.CallbackContext context);
+            void OnInteract(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
