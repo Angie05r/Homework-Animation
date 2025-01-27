@@ -4,7 +4,7 @@ public class PauseMenu : MonoBehaviour
 {
     //public GameInput inputActions;
     [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private GameObject mainMenu;
+    //[SerializeField] private GameObject mainMenu;
     
     private bool isPaused = false;
 
@@ -40,17 +40,17 @@ public class PauseMenu : MonoBehaviour
     }
     
     #region MainMenu try
-    public void Button_OpenpauseMenu()
-    {
-        mainMenu.SetActive(false);
-       pauseMenu.SetActive(true);
-    }
     
-    public void Button_OpenMainMenu()
-    { 
-        mainMenu.SetActive(true);
-       pauseMenu.SetActive(false);
-    }
+   // public void Button_OpenpauseMenu()
+   // {
+      
+     //  pauseMenu.SetActive(true);
+   // }
+    
+  //  public void Button_MainMenu()
+  //  { 
+  //     pauseMenu.SetActive(false);
+   // }
     
     #endregion
 }

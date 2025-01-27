@@ -463,7 +463,7 @@ Transform:
   m_GameObject: {fileID: 151995857}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.44, y: 0.14, z: -20}
+  m_LocalPosition: {x: -2.4399996, y: 0.13999999, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19444,7 +19444,7 @@ MonoBehaviour:
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 0.23820636, g: 0.2830189, b: 0.19090424, a: 1}
+  m_Color: {r: 0.19390273, g: 0.28235295, b: 0.19215687, a: 1}
   m_Intensity: 4.38
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 1
@@ -19814,13 +19814,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1588365222}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: Button_MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -30211,7 +30211,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenu: {fileID: 0}
   optionsMenu: {fileID: 0}
-  pauseMenu: {fileID: 1660715157}
   fadePanelAnim: {fileID: 0}
 --- !u!1 &1178832227
 GameObject:
@@ -31659,8 +31658,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1358879985}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.44, y: 0.14, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.4399996, y: 0.13999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -31680,7 +31679,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 4
+  runMultiplier: 2
   jumpPower: 8
+  rollSpeed: 14
+  rollDuration: 0.5
   dashSpeed: 17
   dashDuration: 0.5
   boxSize: {x: 0, y: 0}
@@ -32071,6 +32073,14 @@ PrefabInstance:
     - target: {fileID: 3526224394547398986, guid: b6373acd5ef55594b909b0f54a821eb4, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3992226550015256986, guid: b6373acd5ef55594b909b0f54a821eb4, type: 3}
+      propertyPath: onInteracted.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3992226550015256986, guid: b6373acd5ef55594b909b0f54a821eb4, type: 3}
+      propertyPath: onInteracted.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4159619770454479728, guid: b6373acd5ef55594b909b0f54a821eb4, type: 3}
       propertyPath: m_Name
@@ -32698,7 +32708,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1660715157}
-  mainMenu: {fileID: 0}
 --- !u!1 &1660715157
 GameObject:
   m_ObjectHideFlags: 0
@@ -48592,7 +48601,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 23.576553, y: -2.0492468}
+  m_Offset: {x: 23.530975, y: -0.51099515}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -48602,7 +48611,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4.885065, y: 13.930765}
+  m_Size: {x: 4.976219, y: 10.990995}
   m_EdgeRadius: 0
 --- !u!61 &2046094976
 BoxCollider2D:
@@ -48730,7 +48739,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 3.4843254, y: -8.556479}
+  m_Offset: {x: 5.056753, y: -8.528218}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -48740,7 +48749,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 36.97062, y: 0.9458103}
+  m_Size: {x: 40.1155, y: 1.0023327}
   m_EdgeRadius: 0
 --- !u!61 &2046094979
 BoxCollider2D:

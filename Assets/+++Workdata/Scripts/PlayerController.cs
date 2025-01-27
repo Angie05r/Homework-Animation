@@ -14,8 +14,15 @@ public class PlayerController : MonoBehaviour
   
    [Header("Movement")]
    [SerializeField]private float movementSpeed = 4f;
-   //[SerializeField] private float runSpeed = 7f;
+   [SerializeField] public float runMultiplier = 1.5f;
    [SerializeField]private float jumpPower = 4f;
+   
+   private InputAction rollAction;
+
+   public float rollSpeed = 17f;
+   public float rollDuration = 0.5f;
+   private bool isRolling = false;
+   private Vector2 rollDirection;
 
    private InputAction dashAction;
 
@@ -31,15 +38,17 @@ public class PlayerController : MonoBehaviour
    private InputAction moveAction;
    private InputAction runAction;
    private InputAction JumpAction;
+  
    private InputAction interactAction;
 
    
    private bool isJumping;
    private bool canJump;
-   //private bool isRunning;
+   private bool isRunning;
   
    private SpriteRenderer sr;
  
+  
    private Vector2 moveInput; // vector2 is the variable for x,y
    private Rigidbody2D rb; // to let the object move and change things
    private bool isFacingRight = true;
@@ -75,8 +84,11 @@ public class PlayerController : MonoBehaviour
       
        inputActions = new GameInput();
        moveAction = inputActions.Player.Move; // to know that the player has to  move
-       
+
+       runAction = inputActions.Player.Run;
        JumpAction = inputActions.Player.Jump;
+       rollAction = inputActions.Player.Roll;
+       
        dashAction = inputActions.Player.Dash;
 
        interactAction = inputActions.Player.Interact;
@@ -90,22 +102,28 @@ public class PlayerController : MonoBehaviour
 
        moveAction.performed += Move; //subscribed
        moveAction.canceled += Move;
+
+       runAction.performed += StartRunning;
+       runAction.canceled += StopRunning;
        
        JumpAction.performed += Jump;
        
        dashAction.performed += Dash;
+       rollAction.performed += Roll;
 
        interactAction.performed += Interact;
    }
+
   
    private void FixedUpdate() 
    {
        CheckGround();
-       if (!isDashing)
+       if (!isDashing && !isRolling)
        {
-           rb.linearVelocity = new Vector2(moveInput.x * movementSpeed, rb.linearVelocity.y);
+           float adjustSpeed = isRunning ? movementSpeed * runMultiplier : movementSpeed;
+           rb.linearVelocity = new Vector2(moveInput.x * adjustSpeed, rb.linearVelocity.y);
        }
-
+       
        if (moveInput.x > 0 )
        {
            transform.rotation = Quaternion.Euler(0,0,0);
@@ -114,6 +132,7 @@ public class PlayerController : MonoBehaviour
        {
            transform.rotation = Quaternion.Euler(0,180,0);
        }
+       
 
       
    }
@@ -125,9 +144,12 @@ public class PlayerController : MonoBehaviour
        
        
        JumpAction.performed -= Jump;
-       //runAction.performed
-       //runAction,canceled    
+       
+       runAction.performed -= StartRunning;
+       runAction.canceled -= StopRunning; 
+       
        dashAction.performed -= Dash;
+       rollAction.performed -= Roll;
        
        interactAction.performed -= Interact;
    }
@@ -179,6 +201,35 @@ public class PlayerController : MonoBehaviour
    #endregion
 
    
+   public void Roll(InputAction.CallbackContext ctx)
+   {
+       if (ctx.performed && !isRolling)
+       {
+           // Roll-Richtung basierend auf der Eingabe
+           rollDirection = moveInput.normalized; 
+           StartCoroutine(RollCoroutine());
+           Debug.Log("Roll");
+       }
+   }
+   
+   private IEnumerator RollCoroutine()
+   {
+       isRolling = true;
+       float startTime = Time.time;
+       Debug.Log("Starting Roll");
+
+       while (Time.time < startTime + rollDuration)
+       {
+           Debug.Log("Rolling");
+           rb.linearVelocity = new Vector2(rollDirection.x * rollSpeed, rb.linearVelocity.y);
+           yield return null;
+       }
+
+       // Roll beendet, Bewegung zurücksetzen
+       rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+       isRolling = false;
+       Debug.Log("rollEnded");
+   }
    
    void CheckGround()
    {
@@ -203,18 +254,34 @@ public class PlayerController : MonoBehaviour
       Gizmos.DrawWireCube(boxxOffset , boxSize );
    }
 
+ 
    private void Jump(InputAction.CallbackContext ctx) // damit man springen kann
    {
        if(!isGrounded)
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
       
+   } 
+   #region RunMethods
+   private void StartRunning(InputAction.CallbackContext ctx)
+   {
+       isRunning = true;
+
+   }
+   private void StopRunning(InputAction.CallbackContext ctx)
+   {
+       isRunning = false;
+
    }
    
+   #endregion
+
   
+   
    private void Update()
    {
        animator.SetFloat("MovementValue" , Mathf.Abs(rb.linearVelocity.x)); // abs so the animation goes in every directrion- it makes the number go from negative to positive
        animator.SetBool("isDashing", isDashing);
+       animator.SetBool("isRolling", isRolling);
    }
 
    private void OnTriggerEnter2D(Collider2D other)

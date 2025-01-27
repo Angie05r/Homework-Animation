@@ -8,7 +8,7 @@
     {
         [SerializeField] private GameObject mainMenu;
         [SerializeField] private GameObject optionsMenu;
-        [SerializeField] private GameObject pauseMenu;
+        //[SerializeField] private GameObject pauseMenu;
 
         [SerializeField] private Animator fadePanelAnim;
 
