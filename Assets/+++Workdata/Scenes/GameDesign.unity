@@ -19260,7 +19260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -9.403037, y: -1.5718557}
+  m_AnchoredPosition: {x: -14.09, y: -1.32}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &786781224
@@ -19318,7 +19318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d8bedaaeae400b4898dc6f84981a1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialoguePath: Sign
+  dialoguePath: 
 --- !u!114 &805888343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19331,11 +19331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b97a8a7f72b2a4eb2dc1f94e2c781e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inkEvents:
-  - name: unlock.bridge
-    onEvent:
-      m_PersistentCalls:
-        m_Calls: []
+  inkEvents: []
 --- !u!1 &809216444
 GameObject:
   m_ObjectHideFlags: 0
@@ -31688,7 +31684,7 @@ MonoBehaviour:
   boxSize: {x: 0, y: 0}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   boxxOffset: {x: 0, y: 0}
 --- !u!95 &1358879991
 Animator:

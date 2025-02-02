@@ -41,7 +41,9 @@ public class PlayerController : MonoBehaviour
   
    private InputAction interactAction;
 
+   private int jumpCount;
    
+
    private bool isJumping;
    private bool canJump;
    private bool isRunning;
@@ -64,6 +66,8 @@ public class PlayerController : MonoBehaviour
    #endregion
   
    public static readonly int Hash_MovementValue = Animator.StringToHash("Movement");
+   public static readonly int Hash_IsJumping = Animator.StringToHash("isJumping");
+   public static readonly int Hash_IsGrounded = Animator.StringToHash("isGrounded");
 
 
    public void Flip() // to activate flip - character looks to left or right, depending with direction it walks
@@ -120,6 +124,7 @@ public class PlayerController : MonoBehaviour
        CheckGround();
        if (!isDashing && !isRolling)
        {
+           
            float adjustSpeed = isRunning ? movementSpeed * runMultiplier : movementSpeed;
            rb.linearVelocity = new Vector2(moveInput.x * adjustSpeed, rb.linearVelocity.y);
        }
@@ -133,15 +138,12 @@ public class PlayerController : MonoBehaviour
            transform.rotation = Quaternion.Euler(0,180,0);
        }
        
-
-      
    }
    private void OnDisable()
    {
 
        moveAction.performed -= Move; //unsubscribed
        moveAction.canceled -= Move;
-       
        
        JumpAction.performed -= Jump;
        
@@ -233,9 +235,21 @@ public class PlayerController : MonoBehaviour
    
    void CheckGround()
    {
+       bool wasGrounded = isGrounded;
+       
        isGrounded = Physics2D.OverlapBox( boxxOffset , transform.position, 0f,  groundLayer);
        Debug.Log(isGrounded);
+       
+       if (isGrounded && !wasGrounded)
+       {
+           animator.SetBool(Hash_IsJumping, false);
+       }
+
+       animator.SetBool(Hash_IsGrounded, isGrounded);
    }
+   
+   
+   
    private void Move(InputAction.CallbackContext ctx) // can be ctx or whatever you want
    {
        moveInput = ctx.ReadValue<Vector2>();
@@ -254,13 +268,20 @@ public class PlayerController : MonoBehaviour
       Gizmos.DrawWireCube(boxxOffset , boxSize );
    }
 
- 
+ #region Jump
    private void Jump(InputAction.CallbackContext ctx) // damit man springen kann
    {
-       if(!isGrounded)
-        rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-      
-   } 
+       if(!isGrounded && ctx.performed)
+           rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+       
+       animator.SetBool(Hash_IsJumping, true);
+       
+   }
+    
+  
+   #endregion
+
+   
    #region RunMethods
    private void StartRunning(InputAction.CallbackContext ctx)
    {
