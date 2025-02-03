@@ -37,6 +37,12 @@ public class PlayerStepSound : MonoBehaviour
     [SerializeField] private AudioClip[]mudDashStepSounds;
     [SerializeField] private AudioClip[]woodDashStepSounds;
     [SerializeField] private AudioClip[]defaultDashStepSounds;
+    
+    [Header("Dashsound")]
+    [SerializeField] private AudioClip[]grassAttack_1StepSounds;
+    [SerializeField] private AudioClip[]mudAttack_1StepSounds;
+    [SerializeField] private AudioClip[]woodAttack_1StepSounds;
+    [SerializeField] private AudioClip[]defaultAttack_1StepSounds;
 
     #endregion
     
@@ -175,6 +181,39 @@ public class PlayerStepSound : MonoBehaviour
                 
                 default:
                     PlayRandomSound(defaultDashStepSounds);
+                    break;
+                    
+            }
+        }
+    }
+    
+    public void PlayAttack_1StepSound()
+    {
+        Debug.Log("Stepping Sounds");
+        
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + raycastPosition, 
+            UnityEngine.Vector2.down, raycastDistance, groundLayer);
+
+        if (hit.collider != null)
+        {
+            string groundTag = hit.collider.gameObject.tag;
+
+            switch (groundTag) // switch benutzt worden
+            {
+                case "Gras":
+                    PlayRandomSound(grassAttack_1StepSounds);
+                    break;
+                   
+                case "Mud":
+                    PlayRandomSound(mudAttack_1StepSounds);
+                    break;
+                   
+                case "Wood":
+                    PlayRandomSound(woodAttack_1StepSounds);
+                    break;
+                
+                default:
+                    PlayRandomSound(defaultAttack_1StepSounds);
                     break;
                     
             }
