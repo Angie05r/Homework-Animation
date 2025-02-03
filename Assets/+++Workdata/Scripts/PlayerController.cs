@@ -31,6 +31,11 @@ public class PlayerController : MonoBehaviour
    private bool isDashing = false;
    private Vector2 dashDirection;
    
+   private Vector2 attackDirection;
+   public float attackDuration = 0.5f;
+   public float attackSpeed = 10f;
+   private bool isAttacking_1 = false;
+   
    [Header("GroundCheck")]
    [SerializeField] private Vector2 boxSize;
    [SerializeField] private LayerMask groundLayer;
@@ -38,6 +43,7 @@ public class PlayerController : MonoBehaviour
    private InputAction moveAction;
    private InputAction runAction;
    private InputAction JumpAction;
+   private InputAction attack_1Action;
   
    private InputAction interactAction;
 
@@ -47,6 +53,7 @@ public class PlayerController : MonoBehaviour
    private bool isJumping;
    private bool canJump;
    private bool isRunning;
+   
   
    private SpriteRenderer sr;
  
@@ -68,6 +75,7 @@ public class PlayerController : MonoBehaviour
    public static readonly int Hash_MovementValue = Animator.StringToHash("Movement");
    public static readonly int Hash_IsJumping = Animator.StringToHash("isJumping");
    public static readonly int Hash_IsGrounded = Animator.StringToHash("isGrounded");
+   public static readonly int Hash_IsAttacking_1 = Animator.StringToHash("isAttacking_1");
 
 
    public void Flip() // to activate flip - character looks to left or right, depending with direction it walks
@@ -94,6 +102,7 @@ public class PlayerController : MonoBehaviour
        rollAction = inputActions.Player.Roll;
        
        dashAction = inputActions.Player.Dash;
+       attack_1Action = inputActions.Player.Attack_1;
 
        interactAction = inputActions.Player.Interact;
 
@@ -114,6 +123,7 @@ public class PlayerController : MonoBehaviour
        
        dashAction.performed += Dash;
        rollAction.performed += Roll;
+       attack_1Action.performed += Attack;
 
        interactAction.performed += Interact;
    }
@@ -122,7 +132,7 @@ public class PlayerController : MonoBehaviour
    private void FixedUpdate() 
    {
        CheckGround();
-       if (!isDashing && !isRolling)
+       if (!isDashing && !isRolling && !isAttacking_1)
        {
            
            float adjustSpeed = isRunning ? movementSpeed * runMultiplier : movementSpeed;
@@ -152,6 +162,7 @@ public class PlayerController : MonoBehaviour
        
        dashAction.performed -= Dash;
        rollAction.performed -= Roll;
+       attack_1Action.performed -= Attack;
        
        interactAction.performed -= Interact;
    }
@@ -202,7 +213,7 @@ public class PlayerController : MonoBehaviour
    
    #endregion
 
-   
+   #region Roll
    public void Roll(InputAction.CallbackContext ctx)
    {
        if (ctx.performed && !isRolling)
@@ -232,6 +243,47 @@ public class PlayerController : MonoBehaviour
        isRolling = false;
        Debug.Log("rollEnded");
    }
+   
+   #endregion
+   
+   #region Attack_1
+
+   private void Attack(InputAction.CallbackContext ctx)
+   {
+       animator.SetTrigger("isAttacking_1");
+       
+       if (ctx.performed && !isAttacking_1)
+       {
+           // Attack-Richtung basierend auf der Eingabe
+           attackDirection = moveInput.normalized; 
+           StartCoroutine(AttackCoroutine());
+           Debug.Log("Attack");
+       }
+   }
+   
+   private IEnumerator AttackCoroutine()
+   {
+       isAttacking_1 = true;
+       float startTime = Time.time;
+       Debug.Log("Starting Attack");
+
+       while (Time.time < startTime + attackDuration)
+       {
+           Debug.Log("Attacking");
+           rb.linearVelocity = new Vector2(attackDirection.x * attackSpeed, rb.linearVelocity.y);
+           yield return null;
+       }
+
+       // Attack beendet, Bewegung zurücksetzen
+       rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+       isAttacking_1 = false;
+       Debug.Log("AttackEnded");
+       
+   }
+   
+ 
+   
+   #endregion
    
    void CheckGround()
    {
@@ -303,6 +355,7 @@ public class PlayerController : MonoBehaviour
        animator.SetFloat("MovementValue" , Mathf.Abs(rb.linearVelocity.x)); // abs so the animation goes in every directrion- it makes the number go from negative to positive
        animator.SetBool("isDashing", isDashing);
        animator.SetBool("isRolling", isRolling);
+       animator.SetBool("isAttacking_1", isAttacking_1);
    }
 
    private void OnTriggerEnter2D(Collider2D other)
@@ -330,7 +383,7 @@ public class PlayerController : MonoBehaviour
    {
        Interactable interactable = other.GetComponent<Interactable>();
 
-       if (interactable == null) ;
+       if (interactable == null);
 
        if (selectedInteractble != null)
        {

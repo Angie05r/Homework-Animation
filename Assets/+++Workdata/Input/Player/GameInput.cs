@@ -100,6 +100,15 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack_1"",
+                    ""type"": ""Button"",
+                    ""id"": ""e212961c-2735-4ae6-8ca5-bb9ff9b47a1d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -353,6 +362,17 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a37c3bc2-4ce9-4ddf-9f29-921d946a9d9c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack_1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -970,6 +990,7 @@ namespace UnityEngine.InputSystem
             m_Player_PauseMenu = m_Player.FindAction("PauseMenu", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
             m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
+            m_Player_Attack_1 = m_Player.FindAction("Attack_1", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1057,6 +1078,7 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_PauseMenu;
         private readonly InputAction m_Player_Interact;
         private readonly InputAction m_Player_Roll;
+        private readonly InputAction m_Player_Attack_1;
         public struct PlayerActions
         {
             private @GameInput m_Wrapper;
@@ -1069,6 +1091,7 @@ namespace UnityEngine.InputSystem
             public InputAction @PauseMenu => m_Wrapper.m_Player_PauseMenu;
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
             public InputAction @Roll => m_Wrapper.m_Player_Roll;
+            public InputAction @Attack_1 => m_Wrapper.m_Player_Attack_1;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1102,6 +1125,9 @@ namespace UnityEngine.InputSystem
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
+                @Attack_1.started += instance.OnAttack_1;
+                @Attack_1.performed += instance.OnAttack_1;
+                @Attack_1.canceled += instance.OnAttack_1;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1130,6 +1156,9 @@ namespace UnityEngine.InputSystem
                 @Roll.started -= instance.OnRoll;
                 @Roll.performed -= instance.OnRoll;
                 @Roll.canceled -= instance.OnRoll;
+                @Attack_1.started -= instance.OnAttack_1;
+                @Attack_1.performed -= instance.OnAttack_1;
+                @Attack_1.canceled -= instance.OnAttack_1;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1320,6 +1349,7 @@ namespace UnityEngine.InputSystem
             void OnPauseMenu(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
             void OnRoll(InputAction.CallbackContext context);
+            void OnAttack_1(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
