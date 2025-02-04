@@ -37,12 +37,13 @@ public class PlayerStepSound : MonoBehaviour
     [SerializeField] private AudioClip[]mudDashStepSounds;
     [SerializeField] private AudioClip[]woodDashStepSounds;
     [SerializeField] private AudioClip[]defaultDashStepSounds;
-    
-    [Header("Dashsound")]
-    [SerializeField] private AudioClip[]grassAttack_1StepSounds;
-    [SerializeField] private AudioClip[]mudAttack_1StepSounds;
-    [SerializeField] private AudioClip[]woodAttack_1StepSounds;
-    [SerializeField] private AudioClip[]defaultAttack_1StepSounds;
+
+    [Header("Rollsound")]
+    [SerializeField] private AudioClip[]grassRollStepSounds;
+    [SerializeField] private AudioClip[]mudRollStepSounds;
+    [SerializeField] private AudioClip[]woodRollStepSounds;
+    [SerializeField] private AudioClip[]defaultRollStepSounds;
+
 
     #endregion
     
@@ -187,7 +188,7 @@ public class PlayerStepSound : MonoBehaviour
         }
     }
     
-    public void PlayAttack_1StepSound()
+    public void PlayRollStepSound()
     {
         Debug.Log("Stepping Sounds");
         
@@ -201,19 +202,19 @@ public class PlayerStepSound : MonoBehaviour
             switch (groundTag) // switch benutzt worden
             {
                 case "Gras":
-                    PlayRandomSound(grassAttack_1StepSounds);
+                    PlayRandomSound(grassRollStepSounds);
                     break;
                    
                 case "Mud":
-                    PlayRandomSound(mudAttack_1StepSounds);
+                    PlayRandomSound(mudRollStepSounds);
                     break;
                    
                 case "Wood":
-                    PlayRandomSound(woodAttack_1StepSounds);
+                    PlayRandomSound(woodRollStepSounds);
                     break;
                 
                 default:
-                    PlayRandomSound(defaultAttack_1StepSounds);
+                    PlayRandomSound(defaultRollStepSounds);
                     break;
                     
             }

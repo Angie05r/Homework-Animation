@@ -292,14 +292,15 @@ public class PlayerController : MonoBehaviour
        isGrounded = Physics2D.OverlapBox( boxxOffset , transform.position, 0f,  groundLayer);
        Debug.Log(isGrounded);
        
+       {
        if (isGrounded && !wasGrounded)
        {
            animator.SetBool(Hash_IsJumping, false);
        }
 
        animator.SetBool(Hash_IsGrounded, isGrounded);
-   }
-   
+      }
+}
    
    
    private void Move(InputAction.CallbackContext ctx) // can be ctx or whatever you want
@@ -321,16 +322,16 @@ public class PlayerController : MonoBehaviour
    }
 
  #region Jump
-   private void Jump(InputAction.CallbackContext ctx) // damit man springen kann
-   {
-       if(!isGrounded && ctx.performed)
-           rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+ private void Jump(InputAction.CallbackContext ctx) // damit man springen kann
+ { 
+     if(!isGrounded && ctx.performed)
+         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
        
-       animator.SetBool(Hash_IsJumping, true);
+     animator.SetBool(Hash_IsJumping, true);
        
-   }
-    
-  
+    }
+      
+   
    #endregion
 
    
@@ -356,6 +357,7 @@ public class PlayerController : MonoBehaviour
        animator.SetBool("isDashing", isDashing);
        animator.SetBool("isRolling", isRolling);
        animator.SetBool("isAttacking_1", isAttacking_1);
+      
    }
 
    private void OnTriggerEnter2D(Collider2D other)
