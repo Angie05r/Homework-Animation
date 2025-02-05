@@ -15,7 +15,9 @@ public class PlayerController : MonoBehaviour
    [Header("Movement")]
    [SerializeField]private float movementSpeed = 4f;
    [SerializeField] public float runMultiplier = 1.5f;
-   [SerializeField]private float jumpPower = 4f;
+   
+   [SerializeField]private float jumpPower = 5f;
+   [SerializeField] private float jumpPowerLimit = 8f;
    
    private InputAction rollAction;
 
@@ -37,6 +39,8 @@ public class PlayerController : MonoBehaviour
    private bool isAttacking_1 = false;
    
    [Header("GroundCheck")]
+   private bool isGrounded;
+   [SerializeField]private Vector2 boxxOffset;
    [SerializeField] private Vector2 boxSize;
    [SerializeField] private LayerMask groundLayer;
   
@@ -48,10 +52,10 @@ public class PlayerController : MonoBehaviour
    private InputAction interactAction;
 
    private int jumpCount;
-   
-
    private bool isJumping;
    private bool canJump;
+   private bool jumpFix;
+   
    private bool isRunning;
    
   
@@ -62,8 +66,7 @@ public class PlayerController : MonoBehaviour
    private Rigidbody2D rb; // to let the object move and change things
    private bool isFacingRight = true;
  
-   private bool isGrounded;
-   [SerializeField]private Vector2 boxxOffset;
+   
 
    private Interactable selectedInteractble;
 
@@ -73,9 +76,10 @@ public class PlayerController : MonoBehaviour
    #endregion
   
    public static readonly int Hash_MovementValue = Animator.StringToHash("Movement");
-   public static readonly int Hash_IsJumping = Animator.StringToHash("isJumping");
-   public static readonly int Hash_IsGrounded = Animator.StringToHash("isGrounded");
+   //public static readonly int Hash_IsJumping = Animator.StringToHash("isJumping");
+   //public static readonly int Hash_IsGrounded = Animator.StringToHash("isGrounded");
    public static readonly int Hash_IsAttacking_1 = Animator.StringToHash("isAttacking_1");
+   public static readonly int Hash_JumpTrigger = Animator.StringToHash("isJumping");
 
 
    public void Flip() // to activate flip - character looks to left or right, depending with direction it walks
@@ -138,6 +142,12 @@ public class PlayerController : MonoBehaviour
            float adjustSpeed = isRunning ? movementSpeed * runMultiplier : movementSpeed;
            rb.linearVelocity = new Vector2(moveInput.x * adjustSpeed, rb.linearVelocity.y);
        }
+       
+       if (rb.linearVelocity.y > jumpPowerLimit)
+       {
+           rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPowerLimit);
+       }
+
        
        if (moveInput.x > 0 )
        {
@@ -292,16 +302,13 @@ public class PlayerController : MonoBehaviour
        isGrounded = Physics2D.OverlapBox( boxxOffset , transform.position, 0f,  groundLayer);
        Debug.Log(isGrounded);
        
+       if (isGrounded && !canJump && !jumpFix)
        {
-       if (isGrounded && !wasGrounded)
-       {
-           animator.SetBool(Hash_IsJumping, false);
+           jumpFix = true;
+           Invoke("AnimEvent_EndJump", .1f);
        }
 
-       animator.SetBool(Hash_IsGrounded, isGrounded);
-      }
-}
-   
+   }
    
    private void Move(InputAction.CallbackContext ctx) // can be ctx or whatever you want
    {
@@ -323,14 +330,42 @@ public class PlayerController : MonoBehaviour
 
  #region Jump
  private void Jump(InputAction.CallbackContext ctx) // damit man springen kann
- { 
-     if(!isGrounded && ctx.performed)
+ {
+     if (jumpCount < 2 && canJump)
+     {
+         jumpCount++;
+            
+         canJump = false;
+         isJumping = true;
          rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-       
-     animator.SetBool(Hash_IsJumping, true);
-       
-    }
-      
+            
+         animator.SetTrigger(Hash_JumpTrigger);
+
+         print(jumpCount);
+            
+         if (jumpCount == 2)
+         {
+             Invoke("ReleaseJumpTrigger", .1f);
+         }
+     }
+ }
+
+ void ReleaseJumpTrigger()
+ {
+     animator.ResetTrigger(Hash_JumpTrigger);
+ }
+ 
+ public void AnimEvent_EndJump()
+ {
+     isJumping = false;
+     canJump = true;
+     jumpFix = false;
+
+     ReleaseJumpTrigger();
+        
+     jumpCount = 0;
+ }
+
    
    #endregion
 
