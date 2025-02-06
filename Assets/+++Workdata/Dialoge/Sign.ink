@@ -3,9 +3,9 @@
 Sign: Please dont go further. You already crossed the line. It's not safe out here.
 
 +[Continue]
-->back
+->Continue
 +[Go back]
-->Leave
+->back
 
 === Continue ===
 
