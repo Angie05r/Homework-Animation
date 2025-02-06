@@ -7,10 +7,14 @@ namespace Cainos.PixelArtPlatformer_VillageProps
 {
     public class Chest : MonoBehaviour
     {
-        [FoldoutGroup("Reference")]
+        //[FoldoutGroup("Reference")]
         public Animator animator;
+        
+        private bool isOpened;
+        private bool isClosed;
+       
 
-        [FoldoutGroup("Runtime"), ShowInInspector, DisableInEditMode]
+        //[FoldoutGroup("Runtime"), ShowInInspector, DisableInEditMode]
         public bool IsOpened
         {
             get { return isOpened; }
@@ -20,18 +24,20 @@ namespace Cainos.PixelArtPlatformer_VillageProps
                 animator.SetBool("IsOpened", isOpened);
             }
         }
-        private bool isOpened;
+        
 
-        [FoldoutGroup("Runtime"),Button("Open"), HorizontalGroup("Runtime/Button")]
+        //[FoldoutGroup("Runtime"),Button("Open"), HorizontalGroup("Runtime/Button")]
         public void Open()
         {
             IsOpened = true;
         }
 
-        [FoldoutGroup("Runtime"), Button("Close"), HorizontalGroup("Runtime/Button")]
+        //[FoldoutGroup("Runtime"), Button("Close"), HorizontalGroup("Runtime/Button")]
         public void Close()
         {
             IsOpened = false;
         }
     }
+    
+    
 }

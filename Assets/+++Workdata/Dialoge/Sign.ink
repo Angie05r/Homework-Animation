@@ -1,11 +1,20 @@
 == Sign ==
 
-=darkforest
-Sign: You´'ll enter the Blackoat Forst
-Player: Oh there is a lever...
+Sign: Please dont go further. You already crossed the line. It's not safe out here.
 
-*Pull the lever
-~Event("unlock_bridge")
++[Continue]
+->back
++[Go back]
+->Leave
+
+=== Continue ===
+
+Player: Nah, why would I leave. This is only there to scare me off.
+
 ->END
-+Leave it
+
+=== back ===
+
+Player: I feel like its a good idea to leave. I'm starting to get goosbumps.
+
 ->END

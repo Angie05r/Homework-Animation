@@ -17,6 +17,8 @@ public class TriggerEventBehaviour : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("Zoom Trigger");
+        
         if (other.CompareTag("Player"))
         {
             print(other.name);
@@ -24,7 +26,7 @@ public class TriggerEventBehaviour : MonoBehaviour
 
             zoomCam.Priority = 10;
             playerCam.Priority = 0;
-           
+            
         }
     }
 
